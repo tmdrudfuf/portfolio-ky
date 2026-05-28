@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="language-switcher" aria-label="Language selector">
+    <button class="lang-button active" type="button" data-lang="ko">KO</button>
+    <button class="lang-button" type="button" data-lang="en">EN</button>
+  </div>
+
+  <header class="site-header">
+    <a class="logo" href="#home">Ky</a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="#about" data-i18n="navAbout">About</a>
+      <a href="#skills" data-i18n="navSkills">Skills</a>
+      <a href="#projects" data-i18n="navProjects">Projects</a>
+      <a href="#experiences" data-i18n="navExperiences">Experiences</a>
+      <a href="#contact" data-i18n="navContact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="heroEyebrow">Portfolio</p>
+        <h1 data-i18n-html="heroTitle">안녕하세요, 저는 <span>Ky</span>입니다.</h1>
+        <p class="hero-text" data-i18n="heroText">
+          저를 소개하고, 제가 가진 기술과 프로젝트, 경험, 연락처를 정리한 개인 포트폴리오입니다.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#projects" data-i18n="viewProjects">프로젝트 보기</a>
+          <a class="button secondary" href="#contact" data-i18n="contactMe">연락하기</a>
+        </div>
+      </div>
+      <div class="hero-panel" aria-label="Portfolio highlight">
+        <p data-i18n="interestLabel">현재 관심 분야</p>
+        <strong data-i18n="focusTitle">Frontend Development</strong>
+        <span data-i18n="interestText">HTML, CSS, JavaScript를 기반으로 인터랙티브한 웹사이트를 제작합니다.</span>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-heading">
+        <p class="eyebrow">About Me</p>
+        <h2 data-i18n="aboutTitle">나를 소개합니다</h2>
+      </div>
+      <div class="about-grid">
+        <p data-i18n="aboutTextOne">
+          저는 웹 개발을 배우고 성장해가는 개발자입니다. 작은 아이디어를 실제로 사용할 수 있는 화면과 기능으로 구현하는 과정에 큰 흥미를 느낍니다.
+        </p>
+        <p data-i18n="aboutTextTwo">
+          깔끔한 코드, 직관적인 디자인, 반응형 레이아웃을 중요하게 생각하며 꾸준히 프로젝트를 만들며 실력을 쌓고 있습니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="section muted" id="skills">
+      <div class="section-heading">
+        <p class="eyebrow">Skills</p>
+        <h2 data-i18n="skillsTitle">사용할 수 있는 기술</h2>
+      </div>
+      <div class="skills-list">
+        <span>HTML</span>
+        <span>CSS</span>
+        <span>JavaScript</span>
+        <span>Responsive Design</span>
+        <span>Git</span>
+        <span>UI Design</span>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-heading">
+        <p class="eyebrow">Projects</p>
+        <h2 data-i18n="projectsTitle">만든 프로젝트</h2>
+      </div>
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="project-image project-one"></div>
+          <div class="project-body">
+            <h3>Portfolio Website</h3>
+            <p data-i18n="projectOneText">나의 소개, 기술, 프로젝트를 보여주는 개인 포트폴리오 웹사이트입니다.</p>
+            <a href="#home" data-i18n="projectDetail">자세히 보기</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-image project-two"></div>
+          <div class="project-body">
+            <h3>Landing Page</h3>
+            <p data-i18n="projectTwoText">서비스나 제품을 소개하기 위한 반응형 랜딩 페이지 디자인 프로젝트입니다.</p>
+            <a href="#contact" data-i18n="projectContact">문의하기</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-image project-three"></div>
+          <div class="project-body">
+            <h3>JavaScript App</h3>
+            <p data-i18n="projectThreeText">JavaScript를 활용해 사용자의 입력에 반응하는 간단한 웹 앱 프로젝트입니다.</p>
+            <a href="#skills" data-i18n="projectSkills">사용 기술</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section muted" id="experiences">
+      <div class="section-heading">
+        <p class="eyebrow">Experiences</p>
+        <h2 data-i18n="experiencesTitle">경험</h2>
+      </div>
+      <div class="experience-list">
+        <article class="experience-item">
+          <span data-i18n="experienceOneDate">2026 - 현재</span>
+          <div>
+            <h3 data-i18n="experienceOneTitle">Portfolio Project</h3>
+            <p data-i18n="experienceOneText">개인 포트폴리오 웹사이트를 직접 설계하고 HTML, CSS, JavaScript로 구현했습니다.</p>
+          </div>
+        </article>
+        <article class="experience-item">
+          <span data-i18n="experienceTwoDate">학습 과정</span>
+          <div>
+            <h3 data-i18n="experienceTwoTitle">Web Development Practice</h3>
+            <p data-i18n="experienceTwoText">반응형 레이아웃, 웹 접근성, 사용자 중심 인터페이스를 공부하며 작은 프로젝트를 만들고 있습니다.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2 data-i18n="contactTitle">함께 이야기해요</h2>
+        <p data-i18n="contactText">프로젝트 제안, 협업, 질문이 있다면 아래 연락처로 편하게 연락해 주세요.</p>
+      </div>
+      <div class="contact-card">
+        <a href="mailto:your.email@example.com">your.email@example.com</a>
+        <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p data-i18n="footerText">&copy; 2026 Ky. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
