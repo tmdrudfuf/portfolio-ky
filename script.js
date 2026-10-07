@@ -8,7 +8,7 @@ const translations = {
     navExperiences: "경험",
     navContact: "연락처",
     heroTitle: "안녕하세요! 저는 <a href=\"#projects\">모바일 앱과 AI 도구</a>를 만드는 개발자 Ky입니다.",
-    heroText: "직접 만든 Android 앱 두 개가 Google Play 비공개 테스트 중입니다.",
+    heroText: "직접 만든 Android 앱 세 개가 Google Play 비공개 테스트 중입니다.",
     downloadResume: "이력서 다운로드",
     aboutTitle: "나를 소개합니다",
     aboutTextOne:
@@ -28,7 +28,7 @@ const translations = {
     navContact: "Contact",
     heroTitle:
       "Hi! I’m Ky, a developer building <a href=\"#projects\">mobile apps &amp; AI tools</a> from idea to release.",
-    heroText: "Two of my Android apps are in Google Play closed testing.",
+    heroText: "Three of my Android apps are in Google Play closed testing.",
     downloadResume: "Download Resume",
     aboutTitle: "About Me",
     aboutTextOne:

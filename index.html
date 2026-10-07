@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ky | Mobile &amp; AI Developer</title>
-  <meta name="description" content="모바일 앱과 AI 도구를 만드는 개발자 Ky의 포트폴리오. Shift Clock, Memento, Baby Journal 등 프로젝트 9개와 트러블슈팅 기록.">
+  <meta name="description" content="모바일 앱과 AI 도구를 만드는 개발자 Ky의 포트폴리오. Shift Clock, Memento, Eat First, Baby Journal 등 프로젝트 10개와 트러블슈팅 기록.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Noto+Serif+KR:wght@300;400&display=swap">
@@ -29,7 +29,7 @@
   <main>
     <section class="hero" id="home">
       <h1 data-i18n-html="heroTitle">안녕하세요! 저는 <a href="#projects">모바일 앱과 AI 도구</a>를 만드는 개발자 Ky입니다.</h1>
-      <p class="hero-text" data-i18n="heroText">직접 만든 Android 앱 두 개가 Google Play 비공개 테스트 중입니다.</p>
+      <p class="hero-text" data-i18n="heroText">직접 만든 Android 앱 세 개가 Google Play 비공개 테스트 중입니다.</p>
       <a class="hero-link" href="resume-Ky-CS.pdf" download data-i18n="downloadResume">이력서 다운로드</a>
     </section>
 
@@ -217,6 +217,104 @@
                 <dt>Problem</dt><dd>Maestro E2E tests caught the ad banner loading late and pushing the capture buttons up, so a tap could land on the ad instead.</dd>
                 <dt>Fix</dt><dd>Reserved the banner space while ads are loading, and collapsed it only when ads are off.</dd>
                 <dt>Result</dt><dd>All 5 E2E flows pass on the emulator.</dd>
+              </dl>
+            </details>
+          </div>
+        </article>
+        <article class="project">
+          <figure class="project-media media-phone">
+            <img src="images/eatfirst-1.webp" alt="Eat First list grouped into Today, Coming Up and Later" width="400" height="834" loading="lazy">
+            <img src="images/eatfirst-2.webp" alt="Eat First add food screen with recent and common foods" width="400" height="834" loading="lazy">
+            <img src="images/eatfirst-3.webp" alt="Eat First row swiped right to mark it eaten" width="400" height="834" loading="lazy">
+          </figure>
+          <div class="project-title">
+            <img class="app-icon" src="images/icons/eatfirst.webp" alt="" width="144" height="144">
+            <h3>Eat First</h3>
+          </div>
+          <p class="project-meta" lang="ko">Android 앱 · Google Play 비공개 테스트 중</p>
+          <p class="project-meta" lang="en">Android app · In Google Play closed testing</p>
+          <p lang="ko">냉장고 속 음식마다 '언제까지 먹을지(Eat By)'만 정해 두면 먼저 먹어야 할 순서대로 보여주는 냉장고 할 일 목록 앱입니다. 370여 개 식재료 검색과 최근 항목으로 장 본 음식을 한 번에 추가하고, 먹었으면 오른쪽·버렸으면 왼쪽으로 스와이프해 정리합니다. 계정과 서버 없이 기기 안 SQLite에만 저장해 오프라인으로 동작하고, 먹을 음식이 있는 날에만 하루 한 번 알림을 보냅니다.</p>
+          <p lang="en">A to-do list for your fridge: set when you want to eat each food (its Eat By) and the app shows what to eat first. Add a whole shopping trip at once from 370+ common foods or recent items, then swipe right when you ate it or left when you threw it away. No account or server: everything stays in on-device SQLite and works offline, with at most one reminder a day when something is due.</p>
+          <ul class="project-tags">
+            <li>React Native</li>
+            <li>Expo</li>
+            <li>TypeScript</li>
+            <li>SQLite</li>
+            <li>Reanimated</li>
+          </ul>
+          <div class="project-links">
+            <a href="https://tmdrudfuf.github.io/eatfirst/" target="_blank" rel="noreferrer">Website</a>
+            <a href="https://github.com/tmdrudfuf/eatfirst" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+          <div class="issues" lang="ko">
+            <h4>트러블슈팅</h4>
+            <details>
+              <summary>같은 날 요약 알림이 두 번 예약되는 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>알림을 켜자 같은 날짜에 요약 알림이 2개씩 예약된 것을 에뮬레이터의 알람 목록(dumpsys alarm)에서 발견했습니다.</dd>
+                <dt>원인</dt><dd>권한 창이 닫히며 앱이 다시 앞으로 올 때의 새로고침과 '알림 켜기' 처리가 동시에 '전체 취소 → 7일치 다시 예약'을 실행해 순서가 엇갈렸습니다.</dd>
+                <dt>해결</dt><dd>재예약 작업을 하나의 큐로 직렬화했습니다.</dd>
+                <dt>결과</dt><dd>켜기·끄기와 시간 변경을 반복해도 하루에 정확히 1개(7일치 7개)만 예약됩니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Undo를 누르려다 광고를 누를 수 있는 배치</summary>
+              <dl>
+                <dt>문제</dt><dd>'먹음' 처리 뒤 뜨는 Undo 스낵바가 하단 배너 광고 위에 겹쳐, 스낵바가 사라지는 순간 누르면 광고가 클릭될 수 있었습니다. AdMob 정책상 실수 클릭으로 볼 수 있는 배치입니다.</dd>
+                <dt>해결</dt><dd>배너의 실제 높이를 측정해 스낵바를 항상 배너 위로 올렸습니다.</dd>
+                <dt>결과</dt><dd>스낵바와 광고가 겹치지 않습니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Eat By 날짜가 하루 밀릴 수 있는 문제 예방</summary>
+              <dl>
+                <dt>문제</dt><dd>테스트 에뮬레이터는 현지 날짜가 10월 5일인데 UTC로는 이미 10월 6일이었습니다. 날짜를 toISOString()으로 저장하면 '오늘' 그룹이 하루 어긋납니다.</dd>
+                <dt>해결</dt><dd>Eat By를 현지 달력 날짜(YYYY-MM-DD)로 저장하고, 남은 일수는 서머타임 영향을 받지 않게 계산했습니다. 한국·UTC·미국 동부 시간대에서 도는 자체 검사 스크립트를 남겼습니다.</dd>
+                <dt>결과</dt><dd>UTC-10 에뮬레이터에서도 오늘 날짜와 '1 day past Eat By' 표시가 정확했습니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>스크린리더가 탭 이름 앞에 알 수 없는 문자를 읽는 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>접근성 트리를 확인하다가 하단 탭 라벨이 ', Inventory'처럼 보이지 않는 문자로 시작하는 것을 발견했습니다.</dd>
+                <dt>원인</dt><dd>아이콘 폰트의 글리프(사설 영역 문자)가 탭 라벨에 그대로 합쳐졌습니다.</dd>
+                <dt>해결</dt><dd>각 탭에 명시적인 접근성 라벨을 지정했습니다.</dd>
+              </dl>
+            </details>
+          </div>
+          <div class="issues" lang="en">
+            <h4>Troubleshooting</h4>
+            <details>
+              <summary>The daily summary was scheduled twice</summary>
+              <dl>
+                <dt>Problem</dt><dd>Right after turning reminders on, the emulator's alarm list (dumpsys alarm) showed two summary notifications for the same day.</dd>
+                <dt>Cause</dt><dd>The refresh that runs when the permission dialog closes and the app returns to the foreground raced the "turn on" handler, and both ran "cancel all, then schedule 7 days" interleaved.</dd>
+                <dt>Fix</dt><dd>Serialized rescheduling through a single queue.</dd>
+                <dt>Result</dt><dd>Toggling and changing the time repeatedly always leaves exactly one per day (7 for the week).</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>A tap meant for Undo could hit the ad</summary>
+              <dl>
+                <dt>Problem</dt><dd>The Undo snackbar shown after marking food eaten sat on top of the bottom banner ad, so tapping just as it disappeared could click the ad, which AdMob treats as an accidental-click placement.</dd>
+                <dt>Fix</dt><dd>Measured the banner's real height and always lifted the snackbar above it.</dd>
+                <dt>Result</dt><dd>The snackbar and the ad never overlap.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Keeping Eat By dates from slipping a day</summary>
+              <dl>
+                <dt>Problem</dt><dd>On the test emulator it was October 5 locally but already October 6 in UTC. Storing dates with toISOString() would shift the "Today" group by a day.</dd>
+                <dt>Fix</dt><dd>Stored Eat By as a local calendar date (YYYY-MM-DD) and computed days left in a DST-safe way, with a self-check script that runs in Korean, UTC and US Eastern time zones.</dd>
+                <dt>Result</dt><dd>Even on a UTC-10 emulator, "Today" and "1 day past Eat By" were correct.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Screen readers read a stray character before tab names</summary>
+              <dl>
+                <dt>Problem</dt><dd>Inspecting the accessibility tree showed bottom tab labels like ", Inventory" starting with an invisible character.</dd>
+                <dt>Cause</dt><dd>The icon font's glyph (a private-use character) was being merged into the tab label.</dd>
+                <dt>Fix</dt><dd>Gave every tab an explicit accessibility label.</dd>
               </dl>
             </details>
           </div>
