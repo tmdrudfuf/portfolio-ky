@@ -10,8 +10,25 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Noto+Serif+KR:wght@300;400&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Decide before first paint: the cover shows once per visit, and never for deep links like #projects.
+    document.documentElement.classList.add("js");
+    try {
+      if (!sessionStorage.getItem("coverSeen") && !location.hash) {
+        document.documentElement.classList.add("show-cover");
+      }
+    } catch (error) {}
+  </script>
 </head>
 <body>
+  <section class="cover" aria-label="Ky portfolio">
+    <p class="cover-name"><span>Ky</span></p>
+    <span class="cover-line"></span>
+    <p class="cover-text" lang="ko">모바일 앱과 AI 도구를 만드는 Kyeonglyeol Seung의 포트폴리오</p>
+    <p class="cover-text" lang="en">Portfolio of Kyeonglyeol Seung, building mobile apps &amp; AI tools</p>
+    <button class="cover-enter" type="button"><span lang="ko">들어가기</span><span lang="en">Enter</span></button>
+  </section>
+
   <header class="site-header">
     <a class="logo" href="#home">Ky</a>
     <nav class="nav-links" aria-label="Primary navigation">
@@ -700,6 +717,12 @@
           </div>
         </article>
         <article class="project">
+          <figure class="project-media media-phone">
+            <img lang="ko" src="images/drawingcatcher-1.webp" alt="Drawing Catcher 홈 화면" width="400" height="889" loading="lazy">
+            <img lang="ko" src="images/drawingcatcher-2.webp" alt="Drawing Catcher 게임 시작 화면" width="400" height="889" loading="lazy">
+            <img lang="en" src="images/drawingcatcher-1.webp" alt="Drawing Catcher home screen" width="400" height="889" loading="lazy">
+            <img lang="en" src="images/drawingcatcher-2.webp" alt="Drawing Catcher start a game screen" width="400" height="889" loading="lazy">
+          </figure>
           <h3>AI Sketch Game (drawingcatcher)</h3>
           <p class="project-meta" lang="ko">모바일 게임 · 프로토타입</p>
           <p class="project-meta" lang="en">Mobile game · Prototype</p>

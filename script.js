@@ -75,3 +75,62 @@ langButtons.forEach((button) => {
     setLanguage(button.dataset.lang);
   });
 });
+
+// Cover: lifts like a curtain on click, scroll, swipe, or key press, then removes itself.
+const root = document.documentElement;
+const cover = document.querySelector(".cover");
+const pageParts = document.querySelectorAll(".site-header, main, .footer");
+
+function enterSite() {
+  if (!root.classList.contains("show-cover")) return;
+  cover.classList.add("is-leaving");
+  root.classList.remove("show-cover");
+  pageParts.forEach((part) => (part.inert = false));
+  try {
+    sessionStorage.setItem("coverSeen", "1");
+  } catch (error) {}
+  cover.addEventListener("transitionend", () => cover.remove(), { once: true });
+  setTimeout(() => cover.remove(), 1500);
+}
+
+if (root.classList.contains("show-cover")) {
+  pageParts.forEach((part) => (part.inert = true));
+  cover.querySelector(".cover-enter").addEventListener("click", enterSite);
+  window.addEventListener("wheel", (event) => event.deltaY > 0 && enterSite(), { passive: true });
+  window.addEventListener("touchmove", enterSite, { passive: true });
+  window.addEventListener("keydown", (event) => {
+    if (["ArrowDown", "PageDown", "Escape", " ", "Enter"].includes(event.key)) enterSite();
+  });
+} else {
+  cover.remove();
+}
+
+// Phone screenshots rise one after another; count per language since the other set is hidden.
+document.querySelectorAll(".media-phone").forEach((figure) => {
+  ["ko", "en"].forEach((language) => {
+    figure.querySelectorAll(`img[lang="${language}"]`).forEach((image, index) => {
+      image.style.setProperty("--i", index);
+    });
+  });
+});
+
+// Sections fade up as they enter the viewport. Without IntersectionObserver nothing is hidden.
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -10% 0px" }
+  );
+
+  document
+    .querySelectorAll(".section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item")
+    .forEach((element) => {
+      element.classList.add("reveal");
+      observer.observe(element);
+    });
+}
