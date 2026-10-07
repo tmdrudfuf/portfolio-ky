@@ -5,7 +5,6 @@ const translations = {
   ko: {
     navAbout: "소개",
     navProjects: "프로젝트",
-    navExperiences: "경험",
     navContact: "연락처",
     heroTitle: "안녕하세요! 저는 <a href=\"#projects\">모바일 앱과 AI 도구</a>를 만드는 개발자 Ky입니다.",
     heroText: "직접 만든 Android 앱 세 개가 Google Play 비공개 테스트 중입니다.",
@@ -17,14 +16,12 @@ const translations = {
       "기능을 만드는 데서 끝내지 않고 실제와 비슷한 데이터로 테스트하고, 문제의 원인을 찾아 기록하는 과정을 중요하게 생각합니다. 한국어와 영어로 모두 일할 수 있어서, 만드는 앱도 두 언어를 함께 지원합니다.",
     skillsTitle: "사용하는 기술",
     projectsTitle: "만든 프로젝트",
-    experiencesTitle: "경험",
     contactTitle: "함께 이야기해요",
     footerText: "© 2026 Ky. All rights reserved.",
   },
   en: {
     navAbout: "About",
     navProjects: "Projects",
-    navExperiences: "Experience",
     navContact: "Contact",
     heroTitle:
       "Hi! I’m Ky, a developer building <a href=\"#projects\">mobile apps &amp; AI tools</a> from idea to release.",
@@ -37,7 +34,6 @@ const translations = {
       "I don't stop at shipping a feature: I test with realistic data, trace problems to their cause, and write them down. I work fluently in English and Korean, and my apps support both.",
     skillsTitle: "Tools I use",
     projectsTitle: "Projects",
-    experiencesTitle: "Experience",
     contactTitle: "Let's Talk",
     footerText: "© 2026 Ky. All rights reserved.",
   },
@@ -79,7 +75,7 @@ langButtons.forEach((button) => {
 // Scroll reveal: elements fade in each time they enter the viewport and reset when they leave,
 // so the motion replays when scrolling back up or down. Without IntersectionObserver nothing is hidden.
 const revealTargets = document.querySelectorAll(
-  ".hero > :not(.scroll-cue), .section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item"
+  ".hero > :not(.scroll-cue), .section h2:not(.visually-hidden), .project, .prose, .skills"
 );
 let revealObserver = null;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
