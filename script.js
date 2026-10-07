@@ -76,7 +76,46 @@ langButtons.forEach((button) => {
   });
 });
 
+// Scroll reveal: elements fade in each time they enter the viewport and reset when they leave,
+// so the motion replays when scrolling back up or down. Without IntersectionObserver nothing is hidden.
+const revealTargets = document.querySelectorAll(
+  ".hero > *, .section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item"
+);
+let revealObserver = null;
+
+if ("IntersectionObserver" in window) {
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const element = entry.target;
+        if (entry.isIntersecting) {
+          element.classList.add("is-visible");
+        } else {
+          element.classList.remove("is-visible");
+          element.dataset.from = entry.boundingClientRect.top < 0 ? "top" : "bottom";
+        }
+      });
+    },
+    { rootMargin: "0px 0px -10% 0px" }
+  );
+  revealTargets.forEach((element) => element.classList.add("reveal"));
+}
+
+function startReveal() {
+  if (revealObserver) revealTargets.forEach((element) => revealObserver.observe(element));
+}
+
+// Phone screenshots rise one after another; count per language since the other set is hidden.
+document.querySelectorAll(".media-phone").forEach((figure) => {
+  ["ko", "en"].forEach((language) => {
+    figure.querySelectorAll(`img[lang="${language}"]`).forEach((image, index) => {
+      image.style.setProperty("--i", index);
+    });
+  });
+});
+
 // Cover: lifts like a curtain on click, scroll, swipe, or key press, then removes itself.
+// The reveal starts as it lifts, so the hero animates in instead of finishing behind the cover.
 const root = document.documentElement;
 const cover = document.querySelector(".cover");
 const pageParts = document.querySelectorAll(".site-header, main, .footer");
@@ -89,6 +128,7 @@ function enterSite() {
   try {
     sessionStorage.setItem("coverSeen", "1");
   } catch (error) {}
+  startReveal();
   cover.addEventListener("transitionend", () => cover.remove(), { once: true });
   setTimeout(() => cover.remove(), 1500);
 }
@@ -103,34 +143,5 @@ if (root.classList.contains("show-cover")) {
   });
 } else {
   cover.remove();
-}
-
-// Phone screenshots rise one after another; count per language since the other set is hidden.
-document.querySelectorAll(".media-phone").forEach((figure) => {
-  ["ko", "en"].forEach((language) => {
-    figure.querySelectorAll(`img[lang="${language}"]`).forEach((image, index) => {
-      image.style.setProperty("--i", index);
-    });
-  });
-});
-
-// Sections fade up as they enter the viewport. Without IntersectionObserver nothing is hidden.
-if ("IntersectionObserver" in window) {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    { rootMargin: "0px 0px -10% 0px" }
-  );
-
-  document
-    .querySelectorAll(".section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item")
-    .forEach((element) => {
-      element.classList.add("reveal");
-      observer.observe(element);
-    });
+  startReveal();
 }
