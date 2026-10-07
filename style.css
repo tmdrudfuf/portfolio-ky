@@ -1,11 +1,13 @@
 :root {
-  --bg: #fcfcfb;
-  --ink: #161616;
-  --text-soft: #454545;
-  --muted: #6b6b6b;
-  --line: #e6e6e3;
-  --line-strong: #b5b5b0;
-  --tile: #f1f1ee;
+  color-scheme: dark;
+  --bg: #111111;
+  --ink: #f2f2ee;
+  --text-soft: #c9c9c4;
+  --muted: #a3a3a0;
+  --line: #2a2a2a;
+  --line-strong: #55554f;
+  --tile: #1c1c1c;
+  --accent: #c8ff3d;
   --gutter: clamp(20px, 5vw, 64px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
@@ -67,14 +69,19 @@ a {
 }
 
 a:hover {
-  text-decoration-color: currentColor;
+  text-decoration-color: var(--accent);
 }
 
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: #111111;
 }
 
 img {
@@ -171,7 +178,7 @@ img {
 }
 
 .cover-enter:hover {
-  text-decoration-color: currentColor;
+  text-decoration-color: var(--accent);
 }
 
 @keyframes rise {
@@ -275,6 +282,10 @@ img {
   letter-spacing: -0.015em;
 }
 
+.hero h1 a {
+  text-decoration-color: var(--accent);
+}
+
 .hero-text {
   margin-bottom: 18px;
   color: var(--muted);
@@ -312,7 +323,7 @@ img {
 }
 
 .scroll-cue:hover {
-  color: var(--ink);
+  color: var(--accent);
 }
 
 .show-cover .scroll-cue {
@@ -372,7 +383,25 @@ img {
 .media-phone img {
   width: 100%;
   height: auto;
-  box-shadow: 0 14px 32px rgb(22 22 22 / 0.1);
+  box-shadow: 0 14px 32px rgb(0 0 0 / 0.45);
+}
+
+/* Reveal uses `translate`, parallax `transform`, hover `scale`, so the three motions stack. */
+@media (hover: hover) {
+  .media-phone img,
+  .media-gallery img {
+    transition: scale 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+  }
+
+  .media-phone img:hover,
+  .media-gallery img:hover {
+    scale: 1.04;
+    box-shadow: 0 24px 48px rgb(0 0 0 / 0.6);
+  }
+
+  .media-gallery img:hover {
+    scale: 1.02;
+  }
 }
 
 .media-gallery {
@@ -407,6 +436,7 @@ img {
 
 .media-stats strong {
   display: block;
+  font-variant-numeric: tabular-nums;
   color: var(--ink);
   font-family: var(--serif);
   font-size: calc(var(--serif-scale) * clamp(3.5rem, 7vw, 5.5rem));
@@ -444,7 +474,7 @@ img {
 
 .project-meta {
   margin-bottom: 18px;
-  color: var(--muted);
+  color: var(--accent);
   font-size: 0.9rem;
 }
 
@@ -660,14 +690,54 @@ img {
 
 .reveal .media-phone img {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
-  transition-delay: calc(0.2s + var(--i, 0) * 0.12s);
+  translate: 0 32px;
+  transition: opacity 0.9s var(--ease-out), translate 0.9s var(--ease-out), scale 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
+  transition-delay: calc(0.2s + var(--i, 0) * 0.12s), calc(0.2s + var(--i, 0) * 0.12s), 0s, 0s;
 }
 
 .reveal.is-visible .media-phone img {
   opacity: 1;
-  transform: none;
+  translate: none;
+}
+
+/* 1. Reading progress along the top edge, driven by scroll (hidden where unsupported). */
+.scroll-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform-origin: 0 50%;
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* 2. Phone screenshots drift a little slower than the page while they pass through view. */
+@supports (animation-timeline: view()) {
+  .media-phone img {
+    animation: parallax linear both;
+    animation-timeline: view();
+  }
+}
+
+@keyframes parallax {
+  from { transform: translateY(28px); }
+  to { transform: translateY(-28px); }
 }
 
 /* Troubleshooting panels slide open where ::details-content is supported, and snap elsewhere. */
@@ -694,6 +764,10 @@ img {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0s !important;
+  }
+
+  .media-phone img {
+    animation: none !important;
   }
 }
 

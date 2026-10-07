@@ -82,6 +82,22 @@ const revealTargets = document.querySelectorAll(
   ".hero > :not(.scroll-cue), .section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item"
 );
 let revealObserver = null;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// Numbers marked data-count (the ADOS stats) count up from 0 each time they come into view.
+function countUp(element) {
+  if (reduceMotion.matches) return;
+  const target = Number(element.dataset.count);
+  const start = performance.now();
+  element.countRun = start;
+  function tick(now) {
+    if (element.countRun !== start) return;
+    const progress = Math.min((now - start) / 1400, 1);
+    element.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3)));
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
 if ("IntersectionObserver" in window) {
   revealObserver = new IntersectionObserver(
@@ -90,6 +106,7 @@ if ("IntersectionObserver" in window) {
         const element = entry.target;
         if (entry.isIntersecting) {
           element.classList.add("is-visible");
+          element.querySelectorAll("[data-count]").forEach(countUp);
         } else {
           element.classList.remove("is-visible");
           element.dataset.from = entry.boundingClientRect.top < 0 ? "top" : "bottom";
