@@ -79,7 +79,7 @@ langButtons.forEach((button) => {
 // Scroll reveal: elements fade in each time they enter the viewport and reset when they leave,
 // so the motion replays when scrolling back up or down. Without IntersectionObserver nothing is hidden.
 const revealTargets = document.querySelectorAll(
-  ".hero > *, .section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item"
+  ".hero > :not(.scroll-cue), .section h2:not(.visually-hidden), .project, .prose, .skills, .experience-item"
 );
 let revealObserver = null;
 

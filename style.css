@@ -188,7 +188,13 @@ img {
 
 /* Header */
 
+/* Sits over the hero so the hero can fill exactly one screen whatever the header's height. */
 .site-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   gap: 32px;
@@ -246,8 +252,16 @@ img {
 
 /* Hero */
 
+/* One full screen: nothing from the projects peeks in, the arrow points the way down. */
 .hero {
-  padding: clamp(56px, 11vh, 96px) var(--gutter) clamp(120px, 24vh, 240px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 120px var(--gutter) 140px;
   text-align: center;
 }
 
@@ -280,6 +294,35 @@ img {
   transition-delay: 0.3s;
 }
 
+.scroll-cue {
+  position: absolute;
+  bottom: clamp(24px, 5vh, 48px);
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  color: var(--muted);
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 300;
+  text-decoration: none;
+  animation: fade-up 0.9s var(--ease-out) 0.6s both, nudge 2.4s ease-in-out 1.5s infinite;
+}
+
+.scroll-cue:hover {
+  color: var(--ink);
+}
+
+.show-cover .scroll-cue {
+  animation-play-state: paused;
+}
+
+@keyframes nudge {
+  50% { transform: translateY(8px); }
+}
+
 /* Sections */
 
 .section {
@@ -294,9 +337,6 @@ img {
   line-height: 1.2;
 }
 
-#projects {
-  padding-top: 0;
-}
 
 /* Projects: one per row, alternating sides and widths */
 
@@ -651,6 +691,7 @@ img {
   *::after {
     animation-duration: 0.01ms !important;
     animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0s !important;
   }
