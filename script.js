@@ -129,31 +129,101 @@ document.querySelectorAll(".media-phone").forEach((figure) => {
 
 // Cover: lifts like a curtain on click, scroll, swipe, or key press, then removes itself.
 // The reveal starts as it lifts, so the hero animates in instead of finishing behind the cover.
+// The gesture that dismisses the cover must not also scroll the page: a swipe or trackpad flick
+// keeps sending momentum for a second or two, which used to land visitors halfway down. So
+// scrolling stays blocked until the curtain is gone and that input has gone quiet, and the page is
+// then put back at the top.
 const root = document.documentElement;
 const cover = document.querySelector(".cover");
 const pageParts = document.querySelectorAll(".site-header, main, .footer");
+const coverKeys = ["ArrowDown", "PageDown", "Escape", " ", "Enter"];
+const coverEvents = new AbortController();
+let curtainDone = false;
+let touching = false;
+let quietTimer = 0;
+
+function unlockScroll() {
+  if (coverEvents.signal.aborted) return;
+  coverEvents.abort();
+  clearTimeout(quietTimer);
+  root.classList.remove("cover-lifting");
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+// Unlock 250ms after the last wheel or touch input, once no finger is down.
+function unlockWhenQuiet() {
+  if (!curtainDone || touching) return;
+  clearTimeout(quietTimer);
+  quietTimer = setTimeout(unlockScroll, 250);
+}
+
+function finishCurtain() {
+  if (curtainDone) return;
+  curtainDone = true;
+  cover.remove();
+  unlockWhenQuiet();
+  setTimeout(unlockScroll, 3000); // a gesture that never stops can't hold the page forever
+}
 
 function enterSite() {
   if (!root.classList.contains("show-cover")) return;
   cover.classList.add("is-leaving");
+  root.classList.add("cover-lifting");
   root.classList.remove("show-cover");
   pageParts.forEach((part) => (part.inert = false));
   try {
     sessionStorage.setItem("coverSeen", "1");
   } catch (error) {}
   startReveal();
-  cover.addEventListener("transitionend", () => cover.remove(), { once: true });
-  setTimeout(() => cover.remove(), 1500);
+  cover.addEventListener("transitionend", finishCurtain, { once: true });
+  setTimeout(finishCurtain, 1500);
 }
 
 if (root.classList.contains("show-cover")) {
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  window.scrollTo(0, 0);
   pageParts.forEach((part) => (part.inert = true));
-  cover.querySelector(".cover-enter").addEventListener("click", enterSite);
-  window.addEventListener("wheel", (event) => event.deltaY > 0 && enterSite(), { passive: true });
-  window.addEventListener("touchmove", enterSite, { passive: true });
-  window.addEventListener("keydown", (event) => {
-    if (["ArrowDown", "PageDown", "Escape", " ", "Enter"].includes(event.key)) enterSite();
-  });
+  const blocking = { passive: false, signal: coverEvents.signal };
+  const watching = { passive: true, signal: coverEvents.signal };
+  cover.querySelector(".cover-enter").addEventListener("click", enterSite, watching);
+  window.addEventListener(
+    "wheel",
+    (event) => {
+      event.preventDefault();
+      if (event.deltaY > 0) enterSite();
+      unlockWhenQuiet();
+    },
+    blocking
+  );
+  window.addEventListener("touchstart", () => (touching = true), watching);
+  window.addEventListener(
+    "touchmove",
+    (event) => {
+      event.preventDefault();
+      enterSite();
+    },
+    blocking
+  );
+  ["touchend", "touchcancel"].forEach((type) =>
+    window.addEventListener(
+      type,
+      () => {
+        touching = false;
+        unlockWhenQuiet();
+      },
+      watching
+    )
+  );
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      if (!coverKeys.includes(event.key)) return;
+      event.preventDefault();
+      enterSite();
+      unlockWhenQuiet();
+    },
+    blocking
+  );
 } else {
   cover.remove();
   startReveal();

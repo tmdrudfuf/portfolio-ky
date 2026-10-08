@@ -126,7 +126,8 @@ img {
   box-shadow: 0 1px 0 var(--line);
 }
 
-.show-cover body {
+.show-cover body,
+.cover-lifting body {
   overflow: hidden;
 }
 
