@@ -7,7 +7,7 @@ const translations = {
     navProjects: "프로젝트",
     navContact: "연락처",
     heroTitle: "안녕하세요! 저는 <a href=\"#projects\">모바일 앱과 AI 도구</a>를 만드는 개발자 Ky입니다.",
-    heroText: "직접 만든 Android 앱 세 개가 Google Play 비공개 테스트 중입니다.",
+    heroText: "Memento를 Google Play에 출시했고, Android 앱 세 개가 비공개 테스트 중입니다.",
     downloadResume: "이력서 다운로드",
     aboutTitle: "나를 소개합니다",
     aboutTextOne:
@@ -25,7 +25,7 @@ const translations = {
     navContact: "Contact",
     heroTitle:
       "Hi! I’m Ky, a developer building <a href=\"#projects\">mobile apps &amp; AI tools</a> from idea to release.",
-    heroText: "Three of my Android apps are in Google Play closed testing.",
+    heroText: "Memento is live on Google Play, and three more Android apps are in closed testing.",
     downloadResume: "Download Resume",
     aboutTitle: "About Me",
     aboutTextOne:
@@ -69,8 +69,14 @@ navLinks.forEach((link) => {
 langButtons.forEach((button) => {
   button.addEventListener("click", () => {
     setLanguage(button.dataset.lang);
+    try {
+      localStorage.setItem("lang", button.dataset.lang);
+    } catch (error) {}
   });
 });
+
+// The head script already picked the language (saved choice, else the browser's); fill in the text.
+if (document.documentElement.lang !== "ko") setLanguage(document.documentElement.lang);
 
 // Scroll reveal: elements fade in each time they enter the viewport and reset when they leave,
 // so the motion replays when scrolling back up or down. Without IntersectionObserver nothing is hidden.

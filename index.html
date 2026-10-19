@@ -22,7 +22,7 @@
   <meta name="twitter:description" content="Mobile Apps · AI Tools">
   <meta name="twitter:image" content="https://tmdrudfuf.github.io/portfolio-ky/images/og.png?v=2">
   <title>Ky | Mobile &amp; AI Developer</title>
-  <meta name="description" content="모바일 앱과 AI 도구를 만드는 개발자 Ky의 포트폴리오. Shift Clock, Memento, Eat First, Baby Journal 등 프로젝트 10개와 트러블슈팅 기록.">
+  <meta name="description" content="모바일 앱과 AI 도구를 만드는 개발자 Ky의 포트폴리오. Memento, Shift Clock, Eat First, PetPlanny 등 프로젝트 11개와 트러블슈팅 기록.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Noto+Serif+KR:wght@300;400&display=swap">
@@ -31,6 +31,11 @@
   <script>
     // Decide before first paint: the cover shows once per visit, and never for deep links like #projects.
     document.documentElement.classList.add("js");
+    // Language: the visitor's saved choice, else Korean only when the browser's first language is Korean.
+    try {
+      const browserLang = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      document.documentElement.lang = localStorage.getItem("lang") || (/^ko\b/i.test(browserLang) ? "ko" : "en");
+    } catch (error) {}
     try {
       if (!sessionStorage.getItem("coverSeen") && !location.hash) {
         document.documentElement.classList.add("show-cover");
@@ -63,7 +68,7 @@
   <main>
     <section class="hero" id="home">
       <h1 data-i18n-html="heroTitle">안녕하세요! 저는 <a href="#projects">모바일 앱과 AI 도구</a>를 만드는 개발자 Ky입니다.</h1>
-      <p class="hero-text" data-i18n="heroText">직접 만든 Android 앱 세 개가 Google Play 비공개 테스트 중입니다.</p>
+      <p class="hero-text" data-i18n="heroText">Memento를 Google Play에 출시했고, Android 앱 세 개가 비공개 테스트 중입니다.</p>
       <a class="hero-link" href="resume-Ky-CS.pdf" download data-i18n="downloadResume">이력서 다운로드</a>
       <a class="scroll-cue" href="#projects">
         <span class="visually-hidden" lang="ko">프로젝트로 내려가기</span>
@@ -77,89 +82,6 @@
       <div class="project-list">
         <article class="project">
           <figure class="project-media media-phone">
-            <img lang="ko" src="images/shiftclock-ko-1.webp" alt="Shift Clock 대시보드" width="400" height="800" loading="lazy">
-            <img lang="ko" src="images/shiftclock-ko-2.webp" alt="Shift Clock 근무 기록" width="400" height="800" loading="lazy">
-            <img lang="ko" src="images/shiftclock-ko-3.webp" alt="Shift Clock 급여 비교" width="400" height="800" loading="lazy">
-            <img lang="en" src="images/shiftclock-en-1.webp" alt="Shift Clock dashboard" width="400" height="800" loading="lazy">
-            <img lang="en" src="images/shiftclock-en-2.webp" alt="Shift Clock shift history" width="400" height="800" loading="lazy">
-            <img lang="en" src="images/shiftclock-en-3.webp" alt="Shift Clock paycheck comparison" width="400" height="800" loading="lazy">
-          </figure>
-          <div class="project-title">
-            <img class="app-icon" src="images/icons/shiftclock.webp" alt="" width="144" height="144">
-            <h3>Shift Clock</h3>
-          </div>
-          <p class="project-meta" lang="ko">Android 앱 · Google Play 비공개 테스트 중</p>
-          <p class="project-meta" lang="en">Android app · In Google Play closed testing</p>
-          <p lang="ko">시급 근로자를 위한 근무시간·급여 추적 Android 앱입니다. 원탭 출퇴근, 야간·초과근무·팁을 반영한 급여 계산, 실수령액 추정을 제공합니다. 데이터는 오프라인 우선으로 기기에 저장하고 원하면 계정으로 클라우드에 백업하며, 한국어/영어와 달러/원화를 지원합니다.</p>
-          <p lang="en">An Android app for hourly workers to track hours and estimate their next paycheck. One-tap clock in/out, pay calculation for overnight shifts, overtime and tips, and take-home estimates. Data is stored offline-first with optional cloud backup, in English/Korean with USD/KRW.</p>
-          <ul class="project-tags">
-            <li>React Native</li>
-            <li>Expo</li>
-            <li>TypeScript</li>
-            <li>Supabase</li>
-            <li>Jest</li>
-          </ul>
-          <div class="issues" lang="ko">
-            <h4>트러블슈팅</h4>
-            <details>
-              <summary>새 기기에서 기존 계정으로 로그인이 실패하는 문제</summary>
-              <dl>
-                <dt>문제</dt><dd>새 기기에서 급여 명세를 저장했다가 지운 뒤 기존 계정으로 로그인하면, 기기 데이터를 계정 데이터로 바꾸는 과정에서 로그인이 실패했습니다.</dd>
-                <dt>원인</dt><dd>기기의 근무·직장 데이터는 지우면서 삭제된 급여 명세 기록(tombstone)은 남겨 두어, 그 기록이 참조하는 직장을 지우는 순간 외래 키 제약에 걸렸습니다.</dd>
-                <dt>해결</dt><dd>급여 명세 기록까지 함께 정리하도록 고치고, 수정 전 코드에서는 실패하는 동기화 통합 테스트를 추가했습니다.</dd>
-                <dt>결과</dt><dd>같은 회귀가 생기면 테스트에서 바로 드러납니다.</dd>
-              </dl>
-            </details>
-            <details>
-              <summary>광고 SDK 추가 후 클라우드 빌드 실패</summary>
-              <dl>
-                <dt>문제</dt><dd>광고 SDK(react-native-google-mobile-ads 17.2)를 붙인 뒤 EAS 클라우드 빌드가 Gradle 설정 단계에서 실패했습니다.</dd>
-                <dt>원인</dt><dd>라이브러리 코드를 따라가 보니 설정값(googleMobileAdsJson)을 항상 읽으면서, 값은 app.json에 별도 최상위 키가 있을 때만 채우고 있었습니다. 대체 경로에는 오타가 있었습니다.</dd>
-                <dt>해결</dt><dd>app.json에 최상위 키를 추가해 우회하고, 전체 빌드 대신 Gradle 설정 단계만 로컬에서 돌려 빠르게 검증했습니다.</dd>
-                <dt>결과</dt><dd>이후 빌드가 정상적으로 통과해 Google Play 비공개 테스트까지 배포했습니다.</dd>
-              </dl>
-            </details>
-            <details>
-              <summary>Windows에서 로컬 Android 빌드 실패</summary>
-              <dl>
-                <dt>문제</dt><dd>Windows에서 로컬 Android 빌드가 계속 실패했습니다.</dd>
-                <dt>원인</dt><dd>Windows의 260자 경로 제한 때문이었습니다. Android SDK에 포함된 CMake 3.22.1의 ninja 1.10이 긴 경로를 처리하지 못했습니다.</dd>
-                <dt>해결</dt><dd>시스템 설정을 바꾸는 대신 EAS 클라우드에서 개발 빌드를 한 번 만들고, 이후에는 Metro로 반복 개발하도록 흐름을 바꿨습니다. 네이티브 의존성이 바뀔 때만 다시 빌드하면 된다는 점을 README에 정리했습니다.</dd>
-              </dl>
-            </details>
-          </div>
-          <div class="issues" lang="en">
-            <h4>Troubleshooting</h4>
-            <details>
-              <summary>Signing in on a new phone failed</summary>
-              <dl>
-                <dt>Problem</dt><dd>After saving and then deleting a paycheck on a new phone, signing in to an existing account failed while replacing the local data with the account's.</dd>
-                <dt>Cause</dt><dd>It deleted the device's shifts and jobs but left the deleted-paycheck tombstone behind, so deleting the job it referenced hit a foreign key constraint.</dd>
-                <dt>Fix</dt><dd>Cleared paycheck tombstones as well, and added a sync integration test that fails without the fix.</dd>
-                <dt>Result</dt><dd>The same regression is now caught by a test.</dd>
-              </dl>
-            </details>
-            <details>
-              <summary>Cloud build broke after adding the ads SDK</summary>
-              <dl>
-                <dt>Problem</dt><dd>After adding react-native-google-mobile-ads 17.2, EAS cloud builds failed during Gradle configuration.</dd>
-                <dt>Cause</dt><dd>Tracing the library code showed it always read a config value (googleMobileAdsJson) but only set it when app.json had its own top-level key. The fallback path had a typo.</dd>
-                <dt>Fix</dt><dd>Added the top-level key to app.json as a workaround, and verified it quickly with a configuration-only local Gradle run instead of a full build.</dd>
-                <dt>Result</dt><dd>Builds passed again and the app shipped to Google Play closed testing.</dd>
-              </dl>
-            </details>
-            <details>
-              <summary>Local Android builds failed on Windows</summary>
-              <dl>
-                <dt>Problem</dt><dd>Local Android builds kept failing on Windows.</dd>
-                <dt>Cause</dt><dd>Windows' 260-character path limit. The ninja 1.10 bundled with the SDK's CMake 3.22.1 can't handle long paths.</dd>
-                <dt>Fix</dt><dd>Instead of changing system settings, built a development client once on EAS and iterated with Metro after that. Documented in the README that a rebuild is only needed when native dependencies change.</dd>
-              </dl>
-            </details>
-          </div>
-        </article>
-        <article class="project">
-          <figure class="project-media media-phone">
             <img lang="ko" src="images/memento-ko-1.webp" alt="Memento 추억 보드" width="400" height="711" loading="lazy">
             <img lang="ko" src="images/memento-ko-2.webp" alt="Memento 추억 상세" width="400" height="711" loading="lazy">
             <img lang="ko" src="images/memento-ko-3.webp" alt="Memento 연간 회고" width="400" height="711" loading="lazy">
@@ -171,10 +93,10 @@
             <img class="app-icon" src="images/icons/memento.webp" alt="" width="144" height="144">
             <h3>Memento</h3>
           </div>
-          <p class="project-meta" lang="ko">모바일 앱 · Google Play 비공개 테스트 중</p>
-          <p class="project-meta" lang="en">Mobile app · In Google Play closed testing</p>
-          <p lang="ko">사진 한 장을 표지로 관련 사진·영상·메모를 하나의 추억으로 묶어 보드에 모아두는 모바일 앱입니다. 계정이나 서버 없이 모든 데이터를 기기 안 SQLite에 저장하고, zip 파일이나 Google Drive로 백업합니다. 홈 화면 위젯과 한국어/영어를 지원하며, 핵심 흐름 5개를 Maestro로 E2E 테스트합니다.</p>
-          <p lang="en">A mobile app that turns one symbolic photo into the cover of a memory holding related photos, videos and a note, pinned to boards. Everything stays on the device in SQLite with no accounts or server, backed up as a zip file or to Google Drive. Includes a home-screen widget, English/Korean, and 5 core flows covered by Maestro E2E tests.</p>
+          <p class="project-meta" lang="ko">모바일 앱 · Google Play 출시</p>
+          <p class="project-meta" lang="en">Mobile app · Live on Google Play</p>
+          <p lang="ko">사진 한 장을 표지로 관련 사진·영상·메모를 하나의 추억으로 묶어 보드에 모아두는 모바일 앱입니다. 계정이나 서버 없이 모든 데이터를 기기 안 SQLite에 저장하고, zip 파일이나 Google Drive로 백업합니다. 홈 화면 위젯과 한국어/영어를 지원하며, 핵심 흐름 5개를 Maestro로 E2E 테스트합니다. 테스터 12명 이상, 14일 이상의 비공개 테스트를 거쳐 2026년 10월 Google Play에 정식 출시했고, Premium 사용자를 위한 앱 잠금(지문·얼굴·PIN)을 추가했습니다.</p>
+          <p lang="en">A mobile app that turns one symbolic photo into the cover of a memory holding related photos, videos and a note, pinned to boards. Everything stays on the device in SQLite with no accounts or server, backed up as a zip file or to Google Drive. Includes a home-screen widget, English/Korean, and 5 core flows covered by Maestro E2E tests. After a closed test with 12+ testers over 14+ days, it launched on Google Play in October 2026, then added a Premium app lock (fingerprint, face or PIN).</p>
           <ul class="project-tags">
             <li>React Native</li>
             <li>Expo</li>
@@ -182,8 +104,7 @@
             <li>Maestro</li>
           </ul>
           <div class="project-links">
-            <a href="https://tmdrudfuf.github.io/Memento/" target="_blank" rel="noreferrer">Website</a>
-            <a href="https://github.com/tmdrudfuf/Memento" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://play.google.com/store/apps/details?id=com.tmdrudfuf.memento" target="_blank" rel="noreferrer">Google Play</a>
           </div>
           <div class="issues" lang="ko">
             <h4>트러블슈팅</h4>
@@ -219,6 +140,22 @@
                 <dt>문제</dt><dd>Maestro E2E 테스트에서 광고 배너가 늦게 로드되면서 촬영 버튼을 위로 밀어 올리는 것을 발견했습니다. 누르려는 순간 버튼이 움직여 광고를 잘못 누를 위험이 있었습니다.</dd>
                 <dt>해결</dt><dd>광고를 불러오는 동안에도 배너 자리를 미리 확보하고, 광고가 꺼진 경우에만 공간을 접었습니다.</dd>
                 <dt>결과</dt><dd>E2E 흐름 5개가 에뮬레이터에서 모두 통과합니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>위젯과 앱이 동시에 DB를 만들다 생긴 첫 실행 오류</summary>
+              <dl>
+                <dt>문제</dt><dd>홈 화면에 위젯이 있는 상태에서 데이터를 지우고 앱을 다시 열면 오류 화면이 떴습니다.</dd>
+                <dt>원인</dt><dd>위젯과 앱이 비어 있는 DB의 마이그레이션을 동시에 실행해서, 두 번째 연결이 'table jars already exists' 오류로 실패했습니다.</dd>
+                <dt>해결</dt><dd>마이그레이션이 BEGIN IMMEDIATE로 쓰기 잠금을 먼저 잡고 그 안에서 DB 버전을 다시 읽게 해, 늦게 들어온 쪽은 건너뛰도록 했습니다. 회귀 테스트도 추가했습니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Android '굵은 텍스트' 설정에서 글자가 잘리는 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>직접 결제를 테스트하다가, 결제 화면 가격이 "연", "월"만 보이고 설정의 버전 표시가 "1.0."에서 잘리는 것을 발견했습니다.</dd>
+                <dt>원인</dt><dd>Android 12 이상에서 굵은 텍스트를 켜면 글자가 React Native가 계산한 너비보다 넓게 그려져 마지막 단어가 사라졌습니다. 에뮬레이터에서 글자 굵기 조정값을 300으로 하면 재현되고 0이면 사라지는 것으로 원인을 확인했습니다.</dd>
+                <dt>해결</dt><dd>앱 안의 글자가 시스템 굵은 텍스트 설정을 따르지 않도록 했습니다.</dd>
               </dl>
             </details>
           </div>
@@ -258,6 +195,119 @@
                 <dt>Result</dt><dd>All 5 E2E flows pass on the emulator.</dd>
               </dl>
             </details>
+            <details>
+              <summary>A first-launch error when the widget and app built the DB at once</summary>
+              <dl>
+                <dt>Problem</dt><dd>With the widget on the home screen, opening the app after its data was cleared showed an error screen.</dd>
+                <dt>Cause</dt><dd>The widget and the app migrated the empty database at the same time, so the second connection failed with "table jars already exists".</dd>
+                <dt>Fix</dt><dd>Migration now takes a write lock with BEGIN IMMEDIATE and re-reads the schema version under it, so whichever comes second skips. Added a regression test.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Text cut off with Android Bold text turned on</summary>
+              <dl>
+                <dt>Problem</dt><dd>During my own purchase test, the paywall prices showed only "연" and "월", and the version in Settings stopped at "1.0.".</dd>
+                <dt>Cause</dt><dd>With Bold text on (Android 12+), text draws wider than React Native measured, so the last word disappeared. It reproduced on the emulator with a font weight adjustment of 300 and went away at 0.</dd>
+                <dt>Fix</dt><dd>App text no longer follows the system Bold text setting.</dd>
+              </dl>
+            </details>
+          </div>
+        </article>
+        <article class="project">
+          <figure class="project-media media-phone">
+            <img lang="ko" src="images/shiftclock-ko-1.webp" alt="Shift Clock 대시보드" width="400" height="800" loading="lazy">
+            <img lang="ko" src="images/shiftclock-ko-2.webp" alt="Shift Clock 근무 기록" width="400" height="800" loading="lazy">
+            <img lang="ko" src="images/shiftclock-ko-3.webp" alt="Shift Clock 급여 비교" width="400" height="800" loading="lazy">
+            <img lang="en" src="images/shiftclock-en-1.webp" alt="Shift Clock dashboard" width="400" height="800" loading="lazy">
+            <img lang="en" src="images/shiftclock-en-2.webp" alt="Shift Clock shift history" width="400" height="800" loading="lazy">
+            <img lang="en" src="images/shiftclock-en-3.webp" alt="Shift Clock paycheck comparison" width="400" height="800" loading="lazy">
+          </figure>
+          <div class="project-title">
+            <img class="app-icon" src="images/icons/shiftclock.webp" alt="" width="144" height="144">
+            <h3>Shift Clock</h3>
+          </div>
+          <p class="project-meta" lang="ko">Android 앱 · Google Play 비공개 테스트 중</p>
+          <p class="project-meta" lang="en">Android app · In Google Play closed testing</p>
+          <p lang="ko">시급 근로자를 위한 근무시간·급여 추적 Android 앱입니다. 원탭 출퇴근, 야간·초과근무·팁을 반영한 급여 계산, 실수령액 추정을 제공합니다. 데이터는 오프라인 우선으로 기기에 저장하고 원하면 계정으로 클라우드에 백업하며, 한국어/영어와 달러/원화를 지원합니다. 시급, 지급 주기, 초과근무, 공제율 같은 급여 조건은 설정 화면에서 언제든 바꿀 수 있습니다.</p>
+          <p lang="en">An Android app for hourly workers to track hours and estimate their next paycheck. One-tap clock in/out, pay calculation for overnight shifts, overtime and tips, and take-home estimates. Data is stored offline-first with optional cloud backup, in English/Korean with USD/KRW. Wage, pay schedule, overtime and deductions can be changed anytime in settings.</p>
+          <ul class="project-tags">
+            <li>React Native</li>
+            <li>Expo</li>
+            <li>TypeScript</li>
+            <li>Supabase</li>
+            <li>Jest</li>
+          </ul>
+          <div class="issues" lang="ko">
+            <h4>트러블슈팅</h4>
+            <details>
+              <summary>새 기기에서 기존 계정으로 로그인이 실패하는 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>새 기기에서 급여 명세를 저장했다가 지운 뒤 기존 계정으로 로그인하면, 기기 데이터를 계정 데이터로 바꾸는 과정에서 로그인이 실패했습니다.</dd>
+                <dt>원인</dt><dd>기기의 근무·직장 데이터는 지우면서 삭제된 급여 명세 기록(tombstone)은 남겨 두어, 그 기록이 참조하는 직장을 지우는 순간 외래 키 제약에 걸렸습니다.</dd>
+                <dt>해결</dt><dd>급여 명세 기록까지 함께 정리하도록 고치고, 수정 전 코드에서는 실패하는 동기화 통합 테스트를 추가했습니다.</dd>
+                <dt>결과</dt><dd>같은 회귀가 생기면 테스트에서 바로 드러납니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>광고 SDK 추가 후 클라우드 빌드 실패</summary>
+              <dl>
+                <dt>문제</dt><dd>광고 SDK(react-native-google-mobile-ads 17.2)를 붙인 뒤 EAS 클라우드 빌드가 Gradle 설정 단계에서 실패했습니다.</dd>
+                <dt>원인</dt><dd>라이브러리 코드를 따라가 보니 설정값(googleMobileAdsJson)을 항상 읽으면서, 값은 app.json에 별도 최상위 키가 있을 때만 채우고 있었습니다. 대체 경로에는 오타가 있었습니다.</dd>
+                <dt>해결</dt><dd>app.json에 최상위 키를 추가해 우회하고, 전체 빌드 대신 Gradle 설정 단계만 로컬에서 돌려 빠르게 검증했습니다.</dd>
+                <dt>결과</dt><dd>이후 빌드가 정상적으로 통과해 Google Play 비공개 테스트까지 배포했습니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Windows에서 로컬 Android 빌드 실패</summary>
+              <dl>
+                <dt>문제</dt><dd>Windows에서 로컬 Android 빌드가 계속 실패했습니다.</dd>
+                <dt>원인</dt><dd>Windows의 260자 경로 제한 때문이었습니다. Android SDK에 포함된 CMake 3.22.1의 ninja 1.10이 긴 경로를 처리하지 못했습니다.</dd>
+                <dt>해결</dt><dd>시스템 설정을 바꾸는 대신 EAS 클라우드에서 개발 빌드를 한 번 만들고, 이후에는 Metro로 반복 개발하도록 흐름을 바꿨습니다. 네이티브 의존성이 바뀔 때만 다시 빌드하면 된다는 점을 README에 정리했습니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Supabase 무료 프로젝트가 일시정지되는 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>Supabase 무료 프로젝트는 7일 동안 활동이 없으면 일시정지돼서, 사용자가 적은 지금은 클라우드 백업 서버가 멈출 수 있었습니다.</dd>
+                <dt>해결</dt><dd>GitHub Actions가 3일마다 DB에 요청을 보내도록 했습니다. 앱에 이미 들어 있는 공개 키만 쓰고, 권한 거부 응답(42501)이 오는지로 요청이 실제 DB까지 닿았는지 확인합니다.</dd>
+              </dl>
+            </details>
+          </div>
+          <div class="issues" lang="en">
+            <h4>Troubleshooting</h4>
+            <details>
+              <summary>Signing in on a new phone failed</summary>
+              <dl>
+                <dt>Problem</dt><dd>After saving and then deleting a paycheck on a new phone, signing in to an existing account failed while replacing the local data with the account's.</dd>
+                <dt>Cause</dt><dd>It deleted the device's shifts and jobs but left the deleted-paycheck tombstone behind, so deleting the job it referenced hit a foreign key constraint.</dd>
+                <dt>Fix</dt><dd>Cleared paycheck tombstones as well, and added a sync integration test that fails without the fix.</dd>
+                <dt>Result</dt><dd>The same regression is now caught by a test.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Cloud build broke after adding the ads SDK</summary>
+              <dl>
+                <dt>Problem</dt><dd>After adding react-native-google-mobile-ads 17.2, EAS cloud builds failed during Gradle configuration.</dd>
+                <dt>Cause</dt><dd>Tracing the library code showed it always read a config value (googleMobileAdsJson) but only set it when app.json had its own top-level key. The fallback path had a typo.</dd>
+                <dt>Fix</dt><dd>Added the top-level key to app.json as a workaround, and verified it quickly with a configuration-only local Gradle run instead of a full build.</dd>
+                <dt>Result</dt><dd>Builds passed again and the app shipped to Google Play closed testing.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Local Android builds failed on Windows</summary>
+              <dl>
+                <dt>Problem</dt><dd>Local Android builds kept failing on Windows.</dd>
+                <dt>Cause</dt><dd>Windows' 260-character path limit. The ninja 1.10 bundled with the SDK's CMake 3.22.1 can't handle long paths.</dd>
+                <dt>Fix</dt><dd>Instead of changing system settings, built a development client once on EAS and iterated with Metro after that. Documented in the README that a rebuild is only needed when native dependencies change.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Keeping the free Supabase project from pausing</summary>
+              <dl>
+                <dt>Problem</dt><dd>Supabase pauses free projects after 7 days without activity, so with few users so far the cloud backup server could stop.</dd>
+                <dt>Fix</dt><dd>A GitHub Actions job reaches the database every 3 days. It uses only the publishable key already in the app, and a permission-denied response (42501) proves the request reached Postgres.</dd>
+              </dl>
+            </details>
           </div>
         </article>
         <article class="project">
@@ -272,8 +322,8 @@
           </div>
           <p class="project-meta" lang="ko">Android 앱 · Google Play 비공개 테스트 중</p>
           <p class="project-meta" lang="en">Android app · In Google Play closed testing</p>
-          <p lang="ko">냉장고 속 음식마다 '언제까지 먹을지(Eat By)'만 정해 두면 먼저 먹어야 할 순서대로 보여주는 냉장고 할 일 목록 앱입니다. 370여 개 식재료 검색과 최근 항목으로 장 본 음식을 한 번에 추가하고, 먹었으면 오른쪽·버렸으면 왼쪽으로 스와이프해 정리합니다. 계정과 서버 없이 기기 안 SQLite에만 저장해 오프라인으로 동작하고, 먹을 음식이 있는 날에만 하루 한 번 알림을 보냅니다.</p>
-          <p lang="en">A to-do list for your fridge: set when you want to eat each food (its Eat By) and the app shows what to eat first. Add a whole shopping trip at once from 370+ common foods or recent items, then swipe right when you ate it or left when you threw it away. No account or server: everything stays in on-device SQLite and works offline, with at most one reminder a day when something is due.</p>
+          <p lang="ko">냉장고 속 음식마다 '언제까지 먹을지(Eat By)'만 정해 두면 먼저 먹어야 할 순서대로 보여주는 냉장고 할 일 목록 앱입니다. 370여 개 식재료 검색과 최근 항목으로 장 본 음식을 한 번에 추가하고, 먹었으면 오른쪽·버렸으면 왼쪽으로 스와이프해 정리합니다. 계정과 서버 없이 기기 안 SQLite에만 저장해 오프라인으로 동작하고, 먹을 음식이 있는 날에만 하루 한 번 알림을 보냅니다. 휴대폰 언어가 한국어면 화면과 식재료 검색도 한국어로 바뀝니다.</p>
+          <p lang="en">A to-do list for your fridge: set when you want to eat each food (its Eat By) and the app shows what to eat first. Add a whole shopping trip at once from 370+ common foods or recent items, then swipe right when you ate it or left when you threw it away. No account or server: everything stays in on-device SQLite and works offline, with at most one reminder a day when something is due. The screens and food search switch to Korean when the phone is set to Korean.</p>
           <ul class="project-tags">
             <li>React Native</li>
             <li>Expo</li>
@@ -281,10 +331,6 @@
             <li>SQLite</li>
             <li>Reanimated</li>
           </ul>
-          <div class="project-links">
-            <a href="https://tmdrudfuf.github.io/eatfirst/" target="_blank" rel="noreferrer">Website</a>
-            <a href="https://github.com/tmdrudfuf/eatfirst" target="_blank" rel="noreferrer">GitHub</a>
-          </div>
           <div class="issues" lang="ko">
             <h4>트러블슈팅</h4>
             <details>
@@ -443,8 +489,8 @@
             <img class="app-icon" src="images/icons/babyjournal.webp" alt="" width="144" height="144">
             <h3>Baby Journal</h3>
           </div>
-          <p class="project-meta" lang="ko">모바일 앱 · 출시 준비 중</p>
-          <p class="project-meta" lang="en">Mobile app · Preparing for launch</p>
+          <p class="project-meta" lang="ko">모바일 앱 · Google Play 비공개 테스트 중</p>
+          <p class="project-meta" lang="en">Mobile app · In Google Play closed testing</p>
           <p lang="ko">부모와 가족이 아이의 순간을 10초 만에 기록하고 함께 보는 육아 기록 앱입니다. 사진과 메모는 오프라인에서도 남기면 나중에 동기화되고, AI가 메모에서 성장 순간과 일기 문장을 제안합니다. 가족 초대와 실시간 공유, 기록을 근거로 답하는 '일기에 물어보기' 검색을 지원합니다.</p>
           <p lang="en">A private family journal where parents and caregivers record a moment in 10 seconds and share it. Photos and notes work offline and sync later, and AI suggests milestones and diary sentences from notes. Families get invites, realtime sharing, and an "Ask your journal" search that answers from their own records.</p>
           <ul class="project-tags">
@@ -455,9 +501,6 @@
             <li>Cloudflare R2</li>
             <li>OpenAI API</li>
           </ul>
-          <div class="project-links">
-            <a href="https://github.com/tmdrudfuf/baby-journal" target="_blank" rel="noreferrer">GitHub</a>
-          </div>
           <div class="issues" lang="ko">
             <h4>트러블슈팅</h4>
             <details>
@@ -525,6 +568,82 @@
               <dl>
                 <dt>Problem</dt><dd>A pre-launch security audit found that the storage quota trusted the file size the app reported, so under-reporting it could bypass the quota.</dd>
                 <dt>Fix</dt><dd>After an upload, a server function now measures the actual file in R2 and writes the record, and the app's direct write access was revoked.</dd>
+              </dl>
+            </details>
+          </div>
+        </article>
+        <article class="project">
+          <figure class="project-media media-phone">
+            <img lang="ko" src="images/petplanny-1.webp" alt="PetPlanny 홈 화면의 오늘의 돌봄 체크리스트" width="400" height="800" loading="lazy">
+            <img lang="ko" src="images/petplanny-2.webp" alt="PetPlanny 건강수첩" width="400" height="800" loading="lazy">
+            <img lang="ko" src="images/petplanny-3.webp" alt="PetPlanny 캘린더" width="400" height="800" loading="lazy">
+            <img lang="en" src="images/petplanny-1.webp" alt="PetPlanny home with today's care checklist" width="400" height="800" loading="lazy">
+            <img lang="en" src="images/petplanny-2.webp" alt="PetPlanny health book" width="400" height="800" loading="lazy">
+            <img lang="en" src="images/petplanny-3.webp" alt="PetPlanny calendar" width="400" height="800" loading="lazy">
+          </figure>
+          <h3>PetPlanny</h3>
+          <p class="project-meta" lang="ko">Android 앱 · Google Play 테스트 중</p>
+          <p class="project-meta" lang="en">Android app · In Google Play testing</p>
+          <p lang="ko">강아지와 고양이 보호자를 위한 건강 기록·돌봄 앱입니다. 예방접종, 병원 방문, 체중을 건강수첩에 기록하고, 약과 돌봄 일정을 매일 체크리스트와 알림으로 챙겨줍니다. 계정이나 건강 데이터 서버 없이 기기 안 SQLite에 저장하고, 한국어/영어를 지원하며 테스트 90개로 검증합니다.</p>
+          <p lang="en">A health record and daily-care app for dog and cat owners. It keeps vaccinations, vet visits and weight in a health book, and turns medications and care routines into a daily checklist with reminders. No account and no health-data server: everything stays on the device in SQLite, in English/Korean, verified by 90 tests.</p>
+          <ul class="project-tags">
+            <li>React Native</li>
+            <li>Expo</li>
+            <li>TypeScript</li>
+            <li>SQLite</li>
+            <li>Drizzle</li>
+          </ul>
+          <div class="issues" lang="ko">
+            <h4>트러블슈팅</h4>
+            <details>
+              <summary>강제 종료 후 알림이 다시 등록되지 않던 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>사용자가 앱을 강제 종료하면 Android가 예약된 알림을 모두 지우는데, 앱을 다시 열어도 알림이 돌아오지 않았습니다.</dd>
+                <dt>원인</dt><dd>Expo의 알림 저장소에는 알림이 그대로 남아 있어서, 앱이 이미 예약돼 있다고 판단했습니다.</dd>
+                <dt>해결</dt><dd>앱을 시작하거나 다시 열 때마다 고정 ID로 알림을 다시 맞추도록(멱등) 바꿨습니다.</dd>
+                <dt>결과</dt><dd>강제 종료 후 앱을 열면 알림 29개가 다시 등록되고, 재부팅 후에는 앱을 열지 않아도 약 45초 안에 다시 등록됩니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>백업 파일이 깨져도 데이터를 지키기</summary>
+              <dl>
+                <dt>문제</dt><dd>에뮬레이터 테스트에서 백업 버그가 나왔습니다. DB 스냅샷에 WAL 헤더가 남아 있었고, 잘린 백업에는 "백업 파일이 아님"이라는 엉뚱한 안내가 떴고, 사진 바이트 안에 파일 끝 표시와 같은 값이 있으면 진짜 끝으로 오인할 수 있었습니다.</dd>
+                <dt>해결</dt><dd>스냅샷을 롤백 저널 형식으로 표시하고, 끝 기록은 반드시 파일 맨 끝에 있어야 인정하도록 바꿨습니다. 복원은 해시, 버전, 무결성, 외래 키를 모두 검사한 뒤 한 트랜잭션으로 처리하고 실패하면 되돌립니다.</dd>
+                <dt>결과</dt><dd>1바이트만 바뀐 백업도 "손상됨, 변경 없음"으로 거부되고, 기존 데이터와 파일은 그대로 남습니다.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>체중을 수정하면 반올림 값이 저장되던 문제</summary>
+              <dl>
+                <dt>문제</dt><dd>체중을 수정하면 화면에 반올림해 보여준 값을 다시 읽어 저장해서, 30.42 lb가 13.798 kg로 바뀌었습니다.</dd>
+                <dt>해결</dt><dd>값을 바꾸지 않았으면 저장된 kg 값을 그대로 유지하도록 고치고 단위 테스트를 추가했습니다.</dd>
+              </dl>
+            </details>
+          </div>
+          <div class="issues" lang="en">
+            <h4>Troubleshooting</h4>
+            <details>
+              <summary>Reminders never came back after a force stop</summary>
+              <dl>
+                <dt>Problem</dt><dd>A force stop makes Android drop every scheduled alarm, and reopening the app did not bring the reminders back.</dd>
+                <dt>Cause</dt><dd>Expo's notification store still listed them, so the app thought they were already scheduled.</dd>
+                <dt>Fix</dt><dd>Reminders are now reconciled with stable IDs, idempotently, every time the app starts or resumes.</dd>
+                <dt>Result</dt><dd>After a force stop, reopening the app re-arms all 29 alarms; after a reboot they come back within about 45 seconds without opening the app.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Keeping data safe when a backup file is damaged</summary>
+              <dl>
+                <dt>Problem</dt><dd>Emulator testing found backup bugs: the DB snapshot kept its WAL header, a truncated backup was reported as "not a backup", and bytes inside a photo matching the end-of-file record could be taken for the real end.</dd>
+                <dt>Fix</dt><dd>The snapshot is marked rollback-journal, and the end record must be the last thing in the file. Restore checks hashes, versions, integrity and foreign keys, then applies everything in one transaction with rollback.</dd>
+                <dt>Result</dt><dd>A backup with a single flipped byte is rejected as "damaged, not changed", and existing data and files stay untouched.</dd>
+              </dl>
+            </details>
+            <details>
+              <summary>Editing a weight saved the rounded display value</summary>
+              <dl>
+                <dt>Problem</dt><dd>Editing a weight re-read the rounded value shown on screen, turning 30.42 lb into 13.798 kg.</dd>
+                <dt>Fix</dt><dd>An unchanged value now keeps the stored kg, covered by a unit test.</dd>
               </dl>
             </details>
           </div>
@@ -757,9 +876,6 @@
             <li>Gemini</li>
             <li>Veo</li>
           </ul>
-          <div class="project-links">
-            <a href="https://github.com/tmdrudfuf/drawingcatcher" target="_blank" rel="noreferrer">GitHub</a>
-          </div>
           <div class="issues" lang="ko">
             <h4>트러블슈팅</h4>
             <details>
@@ -831,9 +947,6 @@
             <li>Firebase</li>
             <li>OpenAI Vision</li>
           </ul>
-          <div class="project-links">
-            <a href="https://github.com/tmdrudfuf/dailyProof" target="_blank" rel="noreferrer">GitHub</a>
-          </div>
           <div class="issues" lang="ko">
             <h4>트러블슈팅</h4>
             <details>
