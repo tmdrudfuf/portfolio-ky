@@ -7,7 +7,7 @@ const translations = {
     navProjects: "프로젝트",
     navContact: "연락처",
     heroTitle: "안녕하세요! 저는 <a href=\"#projects\">모바일 앱과 AI 도구</a>를 만드는 개발자 Ky입니다.",
-    heroText: "Memento를 Google Play에 출시했고, Android 앱 세 개가 비공개 테스트 중입니다.",
+    heroText: "Memento와 Eat First를 Google Play에 출시했고, Android 앱 두 개가 비공개 테스트 중입니다.",
     downloadResume: "이력서 다운로드",
     aboutTitle: "나를 소개합니다",
     aboutTextOne:
@@ -25,7 +25,7 @@ const translations = {
     navContact: "Contact",
     heroTitle:
       "Hi! I’m Ky, a developer building <a href=\"#projects\">mobile apps &amp; AI tools</a> from idea to release.",
-    heroText: "Memento is live on Google Play, and three more Android apps are in closed testing.",
+    heroText: "Memento and Eat First are live on Google Play, and two more Android apps are in closed testing.",
     downloadResume: "Download Resume",
     aboutTitle: "About Me",
     aboutTextOne:
